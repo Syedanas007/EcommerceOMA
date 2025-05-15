@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using ProductService.Models;
 
 namespace ProductService.Commands
@@ -10,6 +11,7 @@ namespace ProductService.Commands
         public string Manufacturer { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
-        public string ProductImage { get; set; }
+
+        public IFormFile ProductImage { get; set; } 
     }
 }

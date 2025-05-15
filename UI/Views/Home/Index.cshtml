@@ -1,8 +1,56 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "E-Commerce Microservices";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary">🛒 Welcome to E-Commerce Platform</h1>
+        <p class="lead text-muted">
+            A modern, scalable e-commerce solution built using .NET Core 7 microservices architecture.
+        </p>
+        <a class="btn btn-success btn-lg mt-3" href="https://github.com/Syedanas007/EcommerceOMA" target="_blank">
+            🔗 View on GitHub
+        </a>
+    </div>
+
+    <div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <a href="/Product" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 border-primary">
+                    <div class="card-body">
+                        <h5 class="card-title">📦 Product Service</h5>
+                        <p class="card-text text-muted">Manages product data with CQRS pattern and stored procedures.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <a href="/Company" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 border-success">
+                    <div class="card-body">
+                        <h5 class="card-title">🏢 Company Service</h5>
+                        <p class="card-text text-muted">Handles company profiles using Factory pattern and JWT security.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <a href="/Category" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100 border-warning">
+                    <div class="card-body">
+                        <h5 class="card-title">📁 Category Service</h5>
+                        <p class="card-text text-muted">Organizes product categories and links them efficiently across services.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <p class="text-muted">
+            Powered by .NET Core 7, Entity Framework, JWT, and SweetAlert — designed with performance and modularity in mind.
+        </p>
+    </div>
 </div>

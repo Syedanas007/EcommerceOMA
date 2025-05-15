@@ -1,3 +1,4 @@
+@using Microsoft.IdentityModel.Tokens
 @model List<UI.Models.Product>
 
 @{
@@ -35,9 +36,9 @@ else
                     <td>@item.Quantity</td>
                     <td>@item.Price.ToString("C")</td>
                     <td>
-                        @if (!string.IsNullOrEmpty(item.ProductImageUrl))
+                    @if (!string.IsNullOrEmpty(item.ProductImage))
                         {
-                            <img src="@item.ProductImageUrl" alt="Product Image" class="img-thumbnail" style="width: 60px; height: 60px;" />
+                            <img src="@item.ProductImage" alt="Product Image" class="img-thumbnail" style="width: 60px; height: 60px;" />
                         }
                         else
                         {

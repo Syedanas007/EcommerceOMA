@@ -1,26 +1,108 @@
-﻿<!DOCTYPE html>
+﻿@using System.IdentityModel.Tokens.Jwt
+@inject IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>@ViewData["Title"] - MicroserviceUI</title>
+    <title>@ViewData["Title"] - ECommerce</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" />
+    
+    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <style>
+        .nav-link.active {
+            font-weight: bold;
+            color: #007bff !important;
+        }
+    </style>
 </head>
 <body>
+    @{
+        var path = Context.Request.Path.Value?.ToLower();
+
+        // Try to get JWT token from session
+        var token = HttpContextAccessor.HttpContext.Session.GetString("JWToken");
+        string username = null;
+
+        if (!string.IsNullOrEmpty(token))
+        {
+            try
+            {
+                var handler = new JwtSecurityTokenHandler();
+                var jwtToken = handler.ReadJwtToken(token);
+                username = jwtToken.Claims.FirstOrDefault(c => c.Type == "unique_name" || c.Type == "name" || c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value;
+            }
+            catch
+            {
+                username = null;
+            }
+        }
+    }
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="/">Microservice UI</a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a href="/Category" class="nav-link">Category</a></li>
-                <li class="nav-item"><a href="/Product" class="nav-link">Product</a></li>
-                <li class="nav-item"><a href="/Company" class="nav-link">Company</a></li>
-            </ul>
-        </div>
+        <a class="navbar-brand @(path == "/home" ? "active" : "")" href="/Home">ECommerce</a>
+
+        @* Hide nav links completely on the login page *@
+        @if (path != "/account/login" && path != "/account/login/")
+        {
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button> 
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    @if (!string.IsNullOrEmpty(username))
+                    {
+                        <li class="nav-item">
+                            <a href="/Category" class="nav-link @(path == "/category" ? "active" : "")">Category</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Product" class="nav-link @(path == "/product" ? "active" : "")">Product</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/Company" class="nav-link @(path == "/company" ? "active" : "")">Company</a>
+                        </li>
+                    }
+                </ul>
+
+                <ul class="navbar-nav ml-auto">
+                    @if (!string.IsNullOrEmpty(username))
+                    {
+                        <li class="nav-item">
+                            <span class="navbar-text mr-3">
+                                Hello, <strong>@username</strong>
+                            </span>
+                        </li>
+                        <li class="nav-item">
+                            <form method="post" asp-controller="Account" asp-action="Logout" class="form-inline">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Logout</button>
+                            </form>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a href="/Account/Login" class="nav-link">Login</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        }
     </nav>
-    <div class="container mt-3">
+
+    <div class="container mt-4">
         @RenderBody()
     </div>
 
     @RenderSection("Scripts", required: false)
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

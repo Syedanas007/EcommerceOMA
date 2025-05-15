@@ -8,6 +8,6 @@ namespace ProductService.Models
         public string Manufacturer { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
-        public string ProductImage { get; set; } // For simplicity, assume this is the filename of the image.
+        public string ProductImage { get; set; }  // <-- string, NOT IFormFile
     }
 }

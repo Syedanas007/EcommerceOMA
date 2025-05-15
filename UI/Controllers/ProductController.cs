@@ -1,50 +1,68 @@
 using Microsoft.AspNetCore.Mvc;
 using UI.Models;
-using UI.Services;
-using System.IO;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace UI.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly ApiClient _api;
         private readonly string _baseUrl = "http://localhost:5022/api/product"; // API Gateway URL
 
-        public ProductController(ApiClient api)
-        {
-            _api = api;
-        }
+        // GET: /Product/Create
+        public IActionResult Create() => View();
 
+        // GET: /Product/Index
         public async Task<IActionResult> Index()
         {
-            var products = await _api.GetAsync<List<Product>>(_baseUrl);
+            using var client = new HttpClient();
+            var response = await client.GetAsync(_baseUrl);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError(string.Empty, $"API error: {response.StatusCode}");
+                return View(new List<Product>());
+            }
+
+            var products = await response.Content.ReadFromJsonAsync<List<Product>>(new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+            Console.WriteLine(JsonSerializer.Serialize(products));
+
             return View(products);
         }
 
-        public IActionResult Create() => View();
-
+        // POST: /Product/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product)
         {
-            if (product.ProductImage != null && product.ProductImage.Length > 0)
+            using var client = new HttpClient();
+            using var form = new MultipartFormDataContent();
+
+            // Add image file if present
+            if (product.ProductImageUrl != null && product.ProductImageUrl.Length > 0)
             {
-                var fileName = Path.GetFileName(product.ProductImage.FileName);
-                var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
-                Directory.CreateDirectory(uploadsDir);
+                var streamContent = new StreamContent(product.ProductImageUrl.OpenReadStream());
+                streamContent.Headers.ContentType = new MediaTypeHeaderValue(product.ProductImageUrl.ContentType);
 
-                var savePath = Path.Combine(uploadsDir, fileName);
-                using (var stream = new FileStream(savePath, FileMode.Create))
-                {
-                    await product.ProductImage.CopyToAsync(stream);
-                }
-
-                // Set the image URL for API (you can adjust this path according to your API expectations)
-                product.ProductImageUrl = "/uploads/" + fileName;
+                form.Add(streamContent, "ProductImage", product.ProductImageUrl.FileName);
             }
 
-            var response = await _api.PostAsync(_baseUrl, product);
+            // Add other product fields
+            form.Add(new StringContent(product.ProductName ?? ""), "ProductName");
+            form.Add(new StringContent(product.ProductCategoryName ?? ""), "ProductCategoryName");
+            form.Add(new StringContent(product.Manufacturer ?? ""), "Manufacturer");
+            form.Add(new StringContent(product.Quantity.ToString()), "Quantity");
+            form.Add(new StringContent(product.Price.ToString()), "Price");
+
+            var response = await client.PostAsync(_baseUrl, form);
+
             TempData["message"] = response.IsSuccessStatusCode ? "success" : "error";
             return RedirectToAction(nameof(Index));
         }

@@ -10,8 +10,10 @@ namespace UI.Models
         public string Manufacturer { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
-        public string ProductImageUrl { get; set; } // URL or base64
-        public IFormFile ProductImage { get; set; } // 🔹 For uploaded file
+        public string ProductImage { get; set; } 
+        public IFormFile ProductImageUrl { get; set; }
+
 
     }
+
 }

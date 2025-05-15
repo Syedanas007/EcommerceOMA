@@ -66,6 +66,8 @@ if (app.Environment.IsDevelopment())
 
 // 9. Use CORS
 app.UseCors("AllowAll");
+app.UseStaticFiles(); // So wwwroot/images/* can be accessed via browser
+
 
 // 10. Use Authentication and Authorization
 app.UseAuthentication();

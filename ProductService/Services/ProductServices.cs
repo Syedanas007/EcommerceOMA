@@ -1,7 +1,6 @@
 using ProductService.Data;
 using ProductService.Models;
 using ProductService.Commands;
-using ProductService.Queries;
 using Microsoft.EntityFrameworkCore;
 
 namespace ProductService.Services
@@ -9,10 +8,12 @@ namespace ProductService.Services
     public class ProductServiceImpl
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _env;
 
-        public ProductServiceImpl(ApplicationDbContext context)
+        public ProductServiceImpl(ApplicationDbContext context, IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
 
         public async Task<List<Product>> GetAllAsync() => await _context.Products.ToListAsync();
@@ -21,6 +22,25 @@ namespace ProductService.Services
 
         public async Task AddAsync(CreateProductCommand command)
         {
+            string fileName = null;
+
+            if (command.ProductImage != null && command.ProductImage.Length > 0)
+            {
+                // Create unique filename
+                fileName = Guid.NewGuid().ToString() + Path.GetExtension(command.ProductImage.FileName);
+
+                // Path to wwwroot/images
+                var uploads = Path.Combine(_env.WebRootPath, "images");
+                Directory.CreateDirectory(uploads); // Ensure folder exists
+
+                var filePath = Path.Combine(uploads, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await command.ProductImage.CopyToAsync(stream);
+                }
+            }
+
             var product = new Product
             {
                 Id = Guid.NewGuid(),
@@ -29,7 +49,7 @@ namespace ProductService.Services
                 Manufacturer = command.Manufacturer,
                 Quantity = command.Quantity,
                 Price = command.Price,
-                ProductImage = command.ProductImage
+                ProductImage = fileName // Store filename only
             };
 
             _context.Products.Add(product);
