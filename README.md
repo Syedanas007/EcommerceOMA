@@ -66,8 +66,8 @@ This solution implements a microservices-based architecture for an e-commerce do
 ### Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/ecommerce-microservices.git
-cd ecommerce-microservices
+https://github.com/Syedanas007/EcommerceOMA.git
+cd EcommerceOMA
 ```
 
 ### Database Setup
@@ -87,14 +87,21 @@ Example in `appsettings.json`:
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=.;Database=CategoryDb;Trusted_Connection=True;"
+    "DefaultConnection": "Server=(localdb)\\LocalNet;Database=Netproject;Trusted_Connection=True;"
   },
-  "JwtSettings": {
-    "SecretKey": "YourVeryStrongSecretKeyHere",
-    "Issuer": "ECommerceAPI",
-    "Audience": "ECommerceClient",
-    "ExpiryMinutes": 60
-  }
+  "Jwt": {
+    "Key": "q4t7w!z%C*F-JaNdRgUkXp2s5v8y/B?E", 
+    "Issuer": "https://localhost",
+    "Audience": "https://localhost",
+    "ExpireMinutes": 60 
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*"
 }
 ```
 
