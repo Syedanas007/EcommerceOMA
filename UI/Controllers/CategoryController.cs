@@ -1,44 +1,37 @@
-[Authorize]
-public class CategoryController : Controller
+using Microsoft.AspNetCore.Mvc;
+using UI.Models;
+using UI.Services;
+
+namespace UI.Controllers
 {
-    private readonly IHttpClientFactory _httpClientFactory;
-
-    public CategoryController(IHttpClientFactory httpClientFactory)
+    public class CategoryController : Controller
     {
-        _httpClientFactory = httpClientFactory;
-    }
+        private readonly ApiClient _api;
+        private readonly string _baseUrl = "http://localhost:5022/api/category"; // API Gateway URL
 
-    public async Task<IActionResult> Index()
-    {
-                var token = HttpContext.Session.GetString("JWTToken");
-        if (string.IsNullOrEmpty(token)) return RedirectToAction("login", "auth");
-
-        var client = _httpClientFactory.CreateClient();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-        var client = _httpClientFactory.CreateClient("ApiClient");
-        var response = await client.GetAsync("/category/api/category");
-        var json = await response.Content.ReadAsStringAsync();
-        var categories = JsonConvert.DeserializeObject<List<Category>>(json);
-        return View(categories);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Create(Category category)
-    {
-        var client = _httpClientFactory.CreateClient("ApiClient");
-        var content = new StringContent(JsonConvert.SerializeObject(category), Encoding.UTF8, "application/json");
-        var response = await client.PostAsync("/category/api/category", content);
-        
-        if (response.IsSuccessStatusCode)
+        public CategoryController(ApiClient api)
         {
-            TempData["Success"] = "Category created successfully.";
-        }
-        else
-        {
-            TempData["Error"] = "Failed to create category.";
+            _api = api;
         }
 
-        return RedirectToAction("Index");
+        public async Task<IActionResult> Index()
+        {
+            var categories = await _api.GetAsync<List<Category>>(_baseUrl);
+            return View(categories);
+        }
+
+        public IActionResult Create() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> Create(Category category)
+        {
+            var response = await _api.PostAsync(_baseUrl, category);
+            if (response.IsSuccessStatusCode)
+                TempData["message"] = "success";
+            else
+                TempData["message"] = "error";
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

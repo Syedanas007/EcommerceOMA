@@ -1,82 +1,49 @@
-@model List<Product>
-
-@section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        @if (TempData["Success"] != null)
-        {
-            <text>
-            Swal.fire('Success', '@TempData["Success"]', 'success');
-            </text>
-        }
-        else if (TempData["Error"] != null)
-        {
-            <text>
-            Swal.fire('Error', '@TempData["Error"]', 'error');
-            </text>
-        }
-    </script>
+@model List<UI.Models.Product>
+@{
+    ViewData["Title"] = "Products";
 }
 
 <h2>Products</h2>
+<a href="/Product/Create" class="btn btn-primary mb-3">Add Product</a>
 
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label for="ProductName">Product Name</label>
-        <input type="text" id="ProductName" name="ProductName" class="form-control" required />
-    </div>
-
-    <div class="form-group">
-        <label for="ProductCategoryName">Category</label>
-        <input type="text" id="ProductCategoryName" name="ProductCategoryName" class="form-control" required />
-    </div>
-
-    <div class="form-group">
-        <label for="Manufacturer">Manufacturer</label>
-        <input type="text" id="Manufacturer" name="Manufacturer" class="form-control" required />
-    </div>
-
-    <div class="form-group">
-        <label for="Quantity">Quantity</label>
-        <input type="number" id="Quantity" name="Quantity" class="form-control" required />
-    </div>
-
-    <div class="form-group">
-        <label for="Price">Price</label>
-        <input type="number" id="Price" name="Price" class="form-control" required />
-    </div>
-
-    <div class="form-group">
-        <label for="ProductImages">Product Image (JPEG only)</label>
-        <input type="file" id="ProductImages" name="ProductImages" accept="image/jpeg" class="form-control" required />
-    </div>
-
-    <button type="submit" class="btn btn-primary">Add Product</button>
-</form>
-
-<table class="table mt-3">
+<table class="table table-striped">
     <thead>
         <tr>
-            <th>ID</th>
             <th>Name</th>
             <th>Category</th>
             <th>Manufacturer</th>
-            <th>Actions</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Image</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach(var item in Model)
         {
             <tr>
-                <td>@item.Id</td>
                 <td>@item.ProductName</td>
                 <td>@item.ProductCategoryName</td>
                 <td>@item.Manufacturer</td>
+                <td>@item.Quantity</td>
+                <td>@item.Price.ToString("C")</td>
                 <td>
-                    <a href="@Url.Action("Edit", "Product", new { id = item.Id })" class="btn btn-warning btn-sm">Edit</a>
-                    <a href="@Url.Action("Delete", "Product", new { id = item.Id })" class="btn btn-danger btn-sm">Delete</a>
+                    @if (!string.IsNullOrEmpty(item.ProductImageUrl))
+                    {
+                        <img src="@item.ProductImageUrl" style="width: 50px; height: 50px;" />
+                    }
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+@section Scripts {
+    @if (TempData["message"]?.ToString() == "success")
+    {
+        <script>Swal.fire('Success', 'Product added successfully!', 'success');</script>
+    }
+    else if (TempData["message"]?.ToString() == "error")
+    {
+        <script>Swal.fire('Error', 'Failed to add product.', 'error');</script>
+    }
+}

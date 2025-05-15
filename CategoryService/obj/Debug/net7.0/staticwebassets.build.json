@@ -1,11 +1,1 @@
-{
-  "Version": 1,
-  "Hash": "jX+qj4GEy7rGN8kUJ76xeoFFcq5XJuBfOPO8Fa/PVhQ=",
-  "Source": "CategoryService",
-  "BasePath": "_content/CategoryService",
-  "Mode": "Default",
-  "ManifestType": "Build",
-  "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": []
-}
+{"Version":1,"Hash":"Txo8k9LI5CWxzbHGgswiWc9WFU2K+T9P0kb7WsflXDM=","Source":"CategoryService","BasePath":"_content/CategoryService","Mode":"Default","ManifestType":"Build","ReferencedProjectsConfiguration":[],"DiscoveryPatterns":[],"Assets":[],"Endpoints":[]}

@@ -1,47 +1,33 @@
-[Authorize]
-public class ProductController : Controller
+using Microsoft.AspNetCore.Mvc;
+using UI.Models;
+using UI.Services;
+
+namespace UI.Controllers
 {
-    private readonly IHttpClientFactory _httpClientFactory;
-    private readonly IConfiguration _config;
-
-    public ProductController(IHttpClientFactory factory, IConfiguration config)
+    public class ProductController : Controller
     {
-        _httpClientFactory = factory;
-        _config = config;
-    }
+        private readonly ApiClient _api;
+        private readonly string _baseUrl = "http://localhost:5022/api/product"; // API Gateway URL
 
-    public async Task<IActionResult> Index()
-    {
-        var token = HttpContext.Session.GetString("JWTToken");
-        if (string.IsNullOrEmpty(token)) return RedirectToAction("login", "auth");
+        public ProductController(ApiClient api)
+        {
+            _api = api;
+        }
 
-        var client = _httpClientFactory.CreateClient();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        public async Task<IActionResult> Index()
+        {
+            var products = await _api.GetAsync<List<Product>>(_baseUrl);
+            return View(products);
+        }
 
-        var response = await client.GetAsync($"{_config["ApiGatewayBaseUrl"]}/product/api/product");
-        if (!response.IsSuccessStatusCode) return View(new List<Product>());
+        public IActionResult Create() => View();
 
-        var json = await response.Content.ReadAsStringAsync();
-        var products = JsonConvert.DeserializeObject<List<Product>>(json);
-        return View(products);
-    }
-
-    [HttpGet]
-    public IActionResult Create() => View();
-
-    [HttpPost]
-    public async Task<IActionResult> Create(Product model)
-    {
-        var token = HttpContext.Session.GetString("JWTToken");
-        var client = _httpClientFactory.CreateClient();
-        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-        var content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
-        var response = await client.PostAsync($"{_config["ApiGatewayBaseUrl"]}/product/api/product", content);
-
-        TempData[response.IsSuccessStatusCode ? "Success" : "Error"] = response.IsSuccessStatusCode
-            ? "Product created successfully."
-            : "Failed to create product.";
-        return RedirectToAction("Index");
+        [HttpPost]
+        public async Task<IActionResult> Create(Product product)
+        {
+            var response = await _api.PostAsync(_baseUrl, product);
+            TempData["message"] = response.IsSuccessStatusCode ? "success" : "error";
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

@@ -1,11 +1,1 @@
-{
-  "Version": 1,
-  "Hash": "j0c9bMJ5jsqzhPF5VFHs62krbDGMkhcqON2bGvkb1pg=",
-  "Source": "ProductService",
-  "BasePath": "_content/ProductService",
-  "Mode": "Default",
-  "ManifestType": "Build",
-  "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": []
-}
+{"Version":1,"Hash":"decnMUGnSwkU80D5J6CIms0tMrIa/NTYuvkv5J4J8cc=","Source":"ProductService","BasePath":"_content/ProductService","Mode":"Default","ManifestType":"Build","ReferencedProjectsConfiguration":[],"DiscoveryPatterns":[],"Assets":[],"Endpoints":[]}

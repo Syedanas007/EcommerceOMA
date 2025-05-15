@@ -1,5 +1,10 @@
-public class Category
+using System;
+
+namespace UI.Models
 {
-    public Guid Id { get; set; }
-    public string CategoryName { get; set; }
+    public class Category
+    {
+        public Guid Id { get; set; }
+        public string CategoryName { get; set; }
+    }
 }

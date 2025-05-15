@@ -17,15 +17,9 @@ D:\Task\ECommerceOMA\CompanyService\obj\Debug\net7.0\CompanyService.AssemblyInfo
 D:\Task\ECommerceOMA\CompanyService\obj\Debug\net7.0\CompanyService.csproj.CoreCompileInputs.cache
 D:\Task\ECommerceOMA\CompanyService\obj\Debug\net7.0\CompanyService.MvcApplicationPartsAssemblyInfo.cs
 D:\Task\ECommerceOMA\CompanyService\obj\Debug\net7.0\CompanyService.MvcApplicationPartsAssemblyInfo.cache
-D:\Task\ECommerceOMA\CompanyService\obj\Debug\net7.0\staticwebassets\msbuild.CompanyService.Microsoft.AspNetCore.StaticWebAssets.props
-D:\Task\ECommerceOMA\CompanyService\obj\Debug\net7.0\staticwebassets\msbuild.build.CompanyService.props
-D:\Task\ECommerceOMA\CompanyService\obj\Debug\net7.0\staticwebassets\msbuild.buildMultiTargeting.CompanyService.props
-D:\Task\ECommerceOMA\CompanyService\obj\Debug\net7.0\staticwebassets\msbuild.buildTransitive.CompanyService.props
-D:\Task\ECommerceOMA\CompanyService\obj\Debug\net7.0\staticwebassets.pack.json
 D:\Task\ECommerceOMA\CompanyService\obj\Debug\net7.0\staticwebassets.build.json
 D:\Task\ECommerceOMA\CompanyService\obj\Debug\net7.0\staticwebassets.development.json
 D:\Task\ECommerceOMA\CompanyService\obj\Debug\net7.0\scopedcss\bundle\CompanyService.styles.css
-D:\Task\ECommerceOMA\CompanyService\obj\Debug\net7.0\CompanyService.csproj.CopyComplete
 D:\Task\ECommerceOMA\CompanyService\obj\Debug\net7.0\CompanyService.dll
 D:\Task\ECommerceOMA\CompanyService\obj\Debug\net7.0\refint\CompanyService.dll
 D:\Task\ECommerceOMA\CompanyService\obj\Debug\net7.0\CompanyService.pdb
@@ -75,3 +69,8 @@ D:\Task\ECommerceOMA\CompanyService\bin\Debug\net7.0\Microsoft.EntityFrameworkCo
 D:\Task\ECommerceOMA\CompanyService\bin\Debug\net7.0\Microsoft.Extensions.DependencyModel.dll
 D:\Task\ECommerceOMA\CompanyService\bin\Debug\net7.0\Mono.TextTemplating.dll
 D:\Task\ECommerceOMA\CompanyService\bin\Debug\net7.0\System.CodeDom.dll
+D:\Task\ECommerceOMA\CompanyService\bin\Debug\net7.0\CompanyService.staticwebassets.endpoints.json
+D:\Task\ECommerceOMA\CompanyService\obj\Debug\net7.0\CompanyService.sourcelink.json
+D:\Task\ECommerceOMA\CompanyService\obj\Debug\net7.0\staticwebassets.build.json.cache
+D:\Task\ECommerceOMA\CompanyService\obj\Debug\net7.0\staticwebassets.build.endpoints.json
+D:\Task\ECommerceOMA\CompanyService\obj\Debug\net7.0\CompanyS.46620619.Up2Date

@@ -17,15 +17,9 @@ D:\Task\ECommerceOMA\ApiGateway\obj\Debug\net7.0\ApiGateway.AssemblyInfo.cs
 D:\Task\ECommerceOMA\ApiGateway\obj\Debug\net7.0\ApiGateway.csproj.CoreCompileInputs.cache
 D:\Task\ECommerceOMA\ApiGateway\obj\Debug\net7.0\ApiGateway.MvcApplicationPartsAssemblyInfo.cs
 D:\Task\ECommerceOMA\ApiGateway\obj\Debug\net7.0\ApiGateway.MvcApplicationPartsAssemblyInfo.cache
-D:\Task\ECommerceOMA\ApiGateway\obj\Debug\net7.0\staticwebassets\msbuild.ApiGateway.Microsoft.AspNetCore.StaticWebAssets.props
-D:\Task\ECommerceOMA\ApiGateway\obj\Debug\net7.0\staticwebassets\msbuild.build.ApiGateway.props
-D:\Task\ECommerceOMA\ApiGateway\obj\Debug\net7.0\staticwebassets\msbuild.buildMultiTargeting.ApiGateway.props
-D:\Task\ECommerceOMA\ApiGateway\obj\Debug\net7.0\staticwebassets\msbuild.buildTransitive.ApiGateway.props
-D:\Task\ECommerceOMA\ApiGateway\obj\Debug\net7.0\staticwebassets.pack.json
 D:\Task\ECommerceOMA\ApiGateway\obj\Debug\net7.0\staticwebassets.build.json
 D:\Task\ECommerceOMA\ApiGateway\obj\Debug\net7.0\staticwebassets.development.json
 D:\Task\ECommerceOMA\ApiGateway\obj\Debug\net7.0\scopedcss\bundle\ApiGateway.styles.css
-D:\Task\ECommerceOMA\ApiGateway\obj\Debug\net7.0\ApiGateway.csproj.CopyComplete
 D:\Task\ECommerceOMA\ApiGateway\obj\Debug\net7.0\ApiGateway.dll
 D:\Task\ECommerceOMA\ApiGateway\obj\Debug\net7.0\refint\ApiGateway.dll
 D:\Task\ECommerceOMA\ApiGateway\obj\Debug\net7.0\ApiGateway.pdb
@@ -49,3 +43,8 @@ D:\Task\ECommerceOMA\ApiGateway\bin\Debug\net7.0\Newtonsoft.Json.dll
 D:\Task\ECommerceOMA\ApiGateway\bin\Debug\net7.0\Newtonsoft.Json.Bson.dll
 D:\Task\ECommerceOMA\ApiGateway\bin\Debug\net7.0\Ocelot.dll
 D:\Task\ECommerceOMA\ApiGateway\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll
+D:\Task\ECommerceOMA\ApiGateway\bin\Debug\net7.0\ApiGateway.staticwebassets.endpoints.json
+D:\Task\ECommerceOMA\ApiGateway\obj\Debug\net7.0\ApiGateway.sourcelink.json
+D:\Task\ECommerceOMA\ApiGateway\obj\Debug\net7.0\staticwebassets.build.json.cache
+D:\Task\ECommerceOMA\ApiGateway\obj\Debug\net7.0\staticwebassets.build.endpoints.json
+D:\Task\ECommerceOMA\ApiGateway\obj\Debug\net7.0\ApiGateway.csproj.Up2Date

@@ -1,52 +1,30 @@
-@model List<Category>
-
-@section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        @if (TempData["Success"] != null)
-        {
-            <text>
-            Swal.fire('Success', '@TempData["Success"]', 'success');
-            </text>
-        }
-        else if (TempData["Error"] != null)
-        {
-            <text>
-            Swal.fire('Error', '@TempData["Error"]', 'error');
-            </text>
-        }
-    </script>
+@model List<UI.Models.Category>
+@{
+    ViewData["Title"] = "Categories";
 }
 
 <h2>Categories</h2>
+<a href="/Category/Create" class="btn btn-primary mb-3">Add Category</a>
 
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label for="CategoryName">Category Name</label>
-        <input type="text" id="CategoryName" name="CategoryName" class="form-control" required />
-    </div>
-    <button type="submit" class="btn btn-primary">Add Category</button>
-</form>
-
-<table class="table mt-3">
+<table class="table table-striped">
     <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Actions</th>
-        </tr>
+        <tr><th>Name</th></tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach(var item in Model)
         {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.CategoryName</td>
-                <td>
-                    <a href="@Url.Action("Edit", "Category", new { id = item.Id })" class="btn btn-warning btn-sm">Edit</a>
-                    <a href="@Url.Action("Delete", "Category", new { id = item.Id })" class="btn btn-danger btn-sm">Delete</a>
-                </td>
-            </tr>
+            <tr><td>@item.CategoryName</td></tr>
         }
     </tbody>
 </table>
+
+@section Scripts {
+    @if (TempData["message"]?.ToString() == "success")
+    {
+        <script>Swal.fire('Success', 'Category added successfully!', 'success');</script>
+    }
+    else if (TempData["message"]?.ToString() == "error")
+    {
+        <script>Swal.fire('Error', 'Failed to add category.', 'error');</script>
+    }
+}
