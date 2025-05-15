@@ -11,5 +11,7 @@ namespace UI.Models
         public int Quantity { get; set; }
         public decimal Price { get; set; }
         public string ProductImageUrl { get; set; } // URL or base64
+        public IFormFile ProductImage { get; set; } // 🔹 For uploaded file
+
     }
 }

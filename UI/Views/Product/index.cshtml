@@ -1,49 +1,78 @@
 @model List<UI.Models.Product>
+
 @{
     ViewData["Title"] = "Products";
 }
 
-<h2>Products</h2>
-<a href="/Product/Create" class="btn btn-primary mb-3">Add Product</a>
+<h2 class="mb-4">Products</h2>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Manufacturer</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Image</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach(var item in Model)
-        {
+<a asp-action="Create" class="btn btn-success mb-3">+ Add Product</a>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">No products found.</div>
+}
+else
+{
+    <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
             <tr>
-                <td>@item.ProductName</td>
-                <td>@item.ProductCategoryName</td>
-                <td>@item.Manufacturer</td>
-                <td>@item.Quantity</td>
-                <td>@item.Price.ToString("C")</td>
-                <td>
-                    @if (!string.IsNullOrEmpty(item.ProductImageUrl))
-                    {
-                        <img src="@item.ProductImageUrl" style="width: 50px; height: 50px;" />
-                    }
-                </td>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Manufacturer</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Image</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ProductName</td>
+                    <td>@item.ProductCategoryName</td>
+                    <td>@item.Manufacturer</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Price.ToString("C")</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.ProductImageUrl))
+                        {
+                            <img src="@item.ProductImageUrl" alt="Product Image" class="img-thumbnail" style="width: 60px; height: 60px;" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">No image</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     @if (TempData["message"]?.ToString() == "success")
     {
-        <script>Swal.fire('Success', 'Product added successfully!', 'success');</script>
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Product added successfully!',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        </script>
     }
     else if (TempData["message"]?.ToString() == "error")
     {
-        <script>Swal.fire('Error', 'Failed to add product.', 'error');</script>
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Failed to add product.',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        </script>
     }
 }

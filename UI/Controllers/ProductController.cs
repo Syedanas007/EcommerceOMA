@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using UI.Models;
 using UI.Services;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace UI.Controllers
 {
@@ -23,8 +25,25 @@ namespace UI.Controllers
         public IActionResult Create() => View();
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product)
         {
+            if (product.ProductImage != null && product.ProductImage.Length > 0)
+            {
+                var fileName = Path.GetFileName(product.ProductImage.FileName);
+                var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads");
+                Directory.CreateDirectory(uploadsDir);
+
+                var savePath = Path.Combine(uploadsDir, fileName);
+                using (var stream = new FileStream(savePath, FileMode.Create))
+                {
+                    await product.ProductImage.CopyToAsync(stream);
+                }
+
+                // Set the image URL for API (you can adjust this path according to your API expectations)
+                product.ProductImageUrl = "/uploads/" + fileName;
+            }
+
             var response = await _api.PostAsync(_baseUrl, product);
             TempData["message"] = response.IsSuccessStatusCode ? "success" : "error";
             return RedirectToAction(nameof(Index));
