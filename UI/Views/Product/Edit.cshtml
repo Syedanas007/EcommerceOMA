@@ -1,0 +1,35 @@
+@model Product
+
+<h2>Edit Product</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" name="Id" value="@Model.Id" />
+
+    <div class="form-group">
+        <label for="ProductName">Product Name</label>
+        <input type="text" id="ProductName" name="ProductName" class="form-control" value="@Model.ProductName" required />
+    </div>
+
+    <div class="form-group">
+        <label for="ProductCategoryName">Category</label>
+        <input type="text" id="ProductCategoryName" name="ProductCategoryName" class="form-control" value="@Model.ProductCategoryName" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Manufacturer">Manufacturer</label>
+        <input type="text" id="Manufacturer" name="Manufacturer" class="form-control" value="@Model.Manufacturer" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Quantity">Quantity</label>
+        <input type="number" id="Quantity" name="Quantity" class="form-control" value="@Model.Quantity" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Price">Price</label>
+        <input type="number" id="Price" name="Price" class="form-control" value="@Model.Price" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a href="@Url.Action("Index", "Product")" class="btn btn-secondary">Cancel</a>
+</form>

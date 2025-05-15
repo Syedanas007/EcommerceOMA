@@ -1,0 +1,54 @@
+{
+    "Routes": [
+      {
+        "DownstreamPathTemplate": "/api/category/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          { "Host": "localhost", "Port": 5001 }
+        ],
+        "UpstreamPathTemplate": "/category/{everything}",
+        "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+        "AuthenticationOptions": {
+          "AuthenticationProviderKey": "Bearer",
+          "AllowedScopes": []
+        }
+      },
+      {
+        "DownstreamPathTemplate": "/api/product/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          { "Host": "localhost", "Port": 5003 }
+        ],
+        "UpstreamPathTemplate": "/product/{everything}",
+        "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+        "AuthenticationOptions": {
+          "AuthenticationProviderKey": "Bearer",
+          "AllowedScopes": []
+        }
+      },
+      {
+        "DownstreamPathTemplate": "/api/company/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [
+          { "Host": "localhost", "Port": 5002 }
+        ],
+        "UpstreamPathTemplate": "/company/{everything}",
+        "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+        "AuthenticationOptions": {
+          "AuthenticationProviderKey": "Bearer",
+          "AllowedScopes": []
+        }
+      },
+      {
+        "DownstreamPathTemplate": "/api/auth/{everything}",
+        "DownstreamScheme": "http",
+        "DownstreamHostAndPorts": [{ "Host": "localhost", "Port": 5022 }],
+        "UpstreamPathTemplate": "/api/auth/{everything}",
+        "UpstreamHttpMethod": ["POST", "GET"]
+      }
+    ],
+    "GlobalConfiguration": {
+      "BaseUrl": "http://localhost:5022"
+    }
+  }
+  

@@ -1,0 +1,52 @@
+@model List<Category>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        @if (TempData["Success"] != null)
+        {
+            <text>
+            Swal.fire('Success', '@TempData["Success"]', 'success');
+            </text>
+        }
+        else if (TempData["Error"] != null)
+        {
+            <text>
+            Swal.fire('Error', '@TempData["Error"]', 'error');
+            </text>
+        }
+    </script>
+}
+
+<h2>Categories</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label for="CategoryName">Category Name</label>
+        <input type="text" id="CategoryName" name="CategoryName" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Add Category</button>
+</form>
+
+<table class="table mt-3">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.CategoryName</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Category", new { id = item.Id })" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="@Url.Action("Delete", "Category", new { id = item.Id })" class="btn btn-danger btn-sm">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
