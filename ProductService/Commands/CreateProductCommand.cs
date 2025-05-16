@@ -12,6 +12,6 @@ namespace ProductService.Commands
         public int Quantity { get; set; }
         public decimal Price { get; set; }
 
-        public IFormFile ProductImage { get; set; } 
+        public string ProductImage { get; set; } 
     }
 }

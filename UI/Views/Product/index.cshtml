@@ -24,6 +24,7 @@ else
                 <th>Quantity</th>
                 <th>Price</th>
                 <th>Image</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -36,14 +37,25 @@ else
                     <td>@item.Quantity</td>
                     <td>@item.Price.ToString("C")</td>
                     <td>
-                    @if (!string.IsNullOrEmpty(item.ProductImage))
+                        @if (!string.IsNullOrEmpty(item.ProductImage))
                         {
-                            <img src="@item.ProductImage" alt="Product Image" class="img-thumbnail" style="width: 60px; height: 60px;" />
+                            <a href="@item.ProductImage" target="_blank" class="btn btn-outline-primary btn-sm" title="View Image">
+                                <i class="bi bi-eye"></i> <!-- Bootstrap Icons -->
+                            </a>
                         }
                         else
                         {
                             <span class="text-muted">No image</span>
                         }
+                    </td>
+
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Edit</a>
+                            <form asp-action="Delete" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Are you sure you want to delete this product?');">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             }
@@ -54,7 +66,7 @@ else
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    @if (TempData["message"]?.ToString() == "success")
+    @if (TempData["Message"]?.ToString() == "success")
     {
         <script>
             Swal.fire({
@@ -65,12 +77,56 @@ else
             });
         </script>
     }
-    else if (TempData["message"]?.ToString() == "error")
+    else if (TempData["Message"]?.ToString() == "error")
     {
         <script>
             Swal.fire({
                 icon: 'error',
                 title: 'Failed to add product.',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        </script>
+    }
+    else if (TempData["Message"]?.ToString() == "updated")
+    {
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Product updated successfully!',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        </script>
+    }
+    else if (TempData["Message"]?.ToString() == "update-error")
+    {
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Failed to update product.',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        </script>
+    }
+    else if (TempData["Message"]?.ToString() == "deleted")
+    {
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Product deleted successfully!',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        </script>
+    }
+    else if (TempData["Message"]?.ToString() == "delete-error")
+    {
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Failed to delete product.',
                 timer: 2000,
                 showConfirmButton: false
             });

@@ -1,25 +1,26 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using UI.Models;
 using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 using System.Net.Http.Json;
 using System.Text.Json;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System;
 
 namespace UI.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly string _baseUrl = "http://localhost:5022/api/product"; // API Gateway URL
-
-        // GET: /Product/Create
-        public IActionResult Create() => View();
-
-        // GET: /Product/Index
+        private readonly string _baseUrl = "http://localhost:5022/api/product";
         public async Task<IActionResult> Index()
         {
             using var client = new HttpClient();
+            var token = HttpContext.Session.GetString("JWToken");
+            client.DefaultRequestHeaders.Authorization =
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+
             var response = await client.GetAsync(_baseUrl);
 
             if (!response.IsSuccessStatusCode)
@@ -32,38 +33,136 @@ namespace UI.Controllers
             {
                 PropertyNameCaseInsensitive = true
             });
-            Console.WriteLine(JsonSerializer.Serialize(products));
 
             return View(products);
         }
 
-        // POST: /Product/Create
+        public IActionResult Create()
+        {
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product)
         {
-            using var client = new HttpClient();
-            using var form = new MultipartFormDataContent();
-
-            // Add image file if present
-            if (product.ProductImageUrl != null && product.ProductImageUrl.Length > 0)
+            if (!ModelState.IsValid)
             {
-                var streamContent = new StreamContent(product.ProductImageUrl.OpenReadStream());
-                streamContent.Headers.ContentType = new MediaTypeHeaderValue(product.ProductImageUrl.ContentType);
-
-                form.Add(streamContent, "ProductImage", product.ProductImageUrl.FileName);
+                return View(product);
             }
 
-            // Add other product fields
-            form.Add(new StringContent(product.ProductName ?? ""), "ProductName");
-            form.Add(new StringContent(product.ProductCategoryName ?? ""), "ProductCategoryName");
-            form.Add(new StringContent(product.Manufacturer ?? ""), "Manufacturer");
-            form.Add(new StringContent(product.Quantity.ToString()), "Quantity");
-            form.Add(new StringContent(product.Price.ToString()), "Price");
+            try
+            {
+                 using var client = new HttpClient();
 
-            var response = await client.PostAsync(_baseUrl, form);
+        // ✅ Get token from session
+        var token = HttpContext.Session.GetString("JWToken");
 
-            TempData["message"] = response.IsSuccessStatusCode ? "success" : "error";
+        if (string.IsNullOrEmpty(token))
+        {
+            ModelState.AddModelError(string.Empty, "Unauthorized: JWT token is missing.");
+            return View(product);
+        }
+
+        // ✅ Add the token to the Authorization header
+        client.DefaultRequestHeaders.Authorization =
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+        // Convert Quantity and Price to string using member assignment
+        var productDto = new
+        {
+            product.ProductName,
+            product.ProductCategoryName,
+            product.Manufacturer,
+            Quantity = product.Quantity.ToString(),
+            Price = product.Price.ToString(),
+            product.ProductImage
+        };
+
+        var json = JsonSerializer.Serialize(productDto);
+        var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
+
+        var response = await client.PostAsync(_baseUrl, content);
+        Console.WriteLine($"Response StatusCode: {response.StatusCode}");
+        var responseBody = await response.Content.ReadAsStringAsync();
+        Console.WriteLine($"Response Body: {responseBody}");
+        if (response.IsSuccessStatusCode)
+        {
+            TempData["Message"] = "Product created successfully!";
+            TempData["MessageType"] = "success";
+            return RedirectToAction(nameof(Index));
+        }
+        else
+        {
+            var errorContent = await response.Content.ReadAsStringAsync();
+            ModelState.AddModelError(string.Empty, $"Failed to create product: {response.StatusCode}, {errorContent}");
+            return View(product);
+        }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"An unexpected error occurred: {ex.Message}");
+                return View(product);
+            }
+        }
+
+
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            using var client = new HttpClient();
+            var response = await client.GetAsync($"{_baseUrl}/{id}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError(string.Empty, $"API error: {response.StatusCode}");
+                return RedirectToAction(nameof(Index));
+            }
+
+            var product = await response.Content.ReadFromJsonAsync<Product>(new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
+        }
+
+        public async Task<IActionResult> Details(Guid id)
+        {
+            using var client = new HttpClient();
+            var response = await client.GetAsync($"{_baseUrl}/{id}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError(string.Empty, $"API error: {response.StatusCode}");
+                return RedirectToAction(nameof(Index));
+            }
+
+            var product = await response.Content.ReadFromJsonAsync<Product>(new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            using var client = new HttpClient();
+            var response = await client.DeleteAsync($"{_baseUrl}/{id}");
+
+            TempData["message"] = response.IsSuccessStatusCode ? "deleted" : "delete-error";
             return RedirectToAction(nameof(Index));
         }
     }

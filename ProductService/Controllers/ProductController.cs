@@ -35,9 +35,12 @@ namespace ProductService.Controllers
             return Ok(products);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateProduct([FromForm] CreateProductCommand command)
+       [HttpPost]
+        public async Task<IActionResult> CreateProduct([FromBody] CreateProductCommand command)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             var product = await _mediator.Send(command);
             return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
         }

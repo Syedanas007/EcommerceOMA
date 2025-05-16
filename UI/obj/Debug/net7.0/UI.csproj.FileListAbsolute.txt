@@ -40,3 +40,4 @@ D:\Task\ECommerceOMA\UI\obj\Debug\net7.0\refint\UI.dll
 D:\Task\ECommerceOMA\UI\obj\Debug\net7.0\UI.pdb
 D:\Task\ECommerceOMA\UI\obj\Debug\net7.0\UI.genruntimeconfig.cache
 D:\Task\ECommerceOMA\UI\obj\Debug\net7.0\ref\UI.dll
+D:\Task\ECommerceOMA\UI\bin\Debug\net7.0\CloudinaryDotNet.dll

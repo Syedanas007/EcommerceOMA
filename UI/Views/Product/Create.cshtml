@@ -6,7 +6,10 @@
 
 <h2>Create Product</h2>
 
-<form asp-action="Create" method="post" enctype="multipart/form-data">
+<!-- Validation Summary -->
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data" id="productForm">
     <div class="form-group">
         <label asp-for="ProductName" class="control-label"></label>
         <input asp-for="ProductName" class="form-control" />
@@ -37,16 +40,56 @@
         <span asp-validation-for="Price" class="text-danger"></span>
     </div>
 
+    <!-- Actual file input -->
     <div class="form-group">
-        <label asp-for="ProductImage" class="control-label"></label>
-        <input asp-for="ProductImage" type="file" accept=".jpg,.jpeg" class="form-control" />
-        <span asp-validation-for="ProductImage" class="text-danger"></span>
+        <label asp-for="ImageFile">Upload Image</label>
+        <input asp-for="ImageFile" type="file" class="form-control" id="imageInput" />
+        <span class="text-success" id="uploadStatus"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Create</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    <!-- Hidden input to store uploaded image URL -->
+    <input type="hidden" asp-for="ProductImage" id="ProductImage" />
+
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </div>
 </form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+document.getElementById("imageInput").addEventListener("change", async function () {
+    const file = this.files[0];
+    const uploadStatus = document.getElementById("uploadStatus");
+
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "unsigned_upload"); // ✅ use the preset you created
+
+    try {
+        const response = await fetch("https://api.cloudinary.com/v1_1/dqamjwjhl/image/upload", {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await response.json();
+        console.log("Cloudinary Response:", data); // Debugging output
+
+        if (data.secure_url) {
+            document.getElementById("ProductImage").value = data.secure_url;
+            uploadStatus.textContent = "Upload successful!";
+        } else {
+            uploadStatus.textContent = "Upload failed!";
+        }
+    } catch (error) {
+        console.error("Upload error:", error);
+        uploadStatus.textContent = "Upload error!";
+    }
+});
+
+    </script>
 }
