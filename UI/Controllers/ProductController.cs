@@ -160,8 +160,11 @@ namespace UI.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             using var client = new HttpClient();
+                    var token = HttpContext.Session.GetString("JWToken");
+        // ✅ Add the token to the Authorization header
+        client.DefaultRequestHeaders.Authorization =
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             var response = await client.DeleteAsync($"{_baseUrl}/{id}");
-
             TempData["message"] = response.IsSuccessStatusCode ? "deleted" : "delete-error";
             return RedirectToAction(nameof(Index));
         }
